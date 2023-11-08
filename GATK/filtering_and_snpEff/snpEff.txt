@@ -1,0 +1,12 @@
+#command to run after making the montmorency database and according to: http://pcingola.github.io/SnpEff/examples/#example-6-custom-annotations
+#see example 6, custom annotations
+
+java -jar snpEff.jar -v -o gatk montmorency /mnt/scratch/goeckeri/pop4_variant_calling/bwa_mem/MarkDups/subset_4A/combined_gvcf/variant_filter/ALL_filtered_variants_4A.vcf.gz > ALL_filtered_variants_4A_EFF.vcf.gz
+#make a new variants_to_table file, include the extraction of EFF
+
+#chr4 QTL update
+cd /mnt/home/goeckeri/SnpEff/snpEff/
+java -jar snpEff.jar -v -o gatk chr4_update2_montmorency ALL_filtered_variants_4A.vcf.gz > ALL_filtered_variants_4A_EFF_QTL_update2.vcf.gz
+
+#after this step, you'll run the variants-to-table script to pull out the fields you want in a table before reading it into R. 
+#update 2 indicates another run through the QTL region to fix a couple of gene models, namely the ones we're most interested in. 

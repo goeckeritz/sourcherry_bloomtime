@@ -1,0 +1,16 @@
+FAM1	27-02-08	SF	BAL	other	2
+FAM1	27-02-52	SF	BAL	other	2
+FAM1	27-02-65	SF	BAL	other	1
+FAM1	27-03-01	SF	BAL	other	1
+FAM1	27-03-08	SF	BAL	other	2
+FAM1	27-03-25	SF	BAL	other	1
+FAM1	27-03-27	SF	BAL	other	1
+FAM1	27-03-28	SF	BAL	other	1
+FAM1	27-03-46	SF	BAL	other	1
+FAM1	27-04-12	SF	BAL	other	2
+FAM1	27-04-34	SF	BAL	other	1
+FAM1	SF	0	0	other	0
+FAM1	BAL	0	0	other	0
+
+#1 = early bloomer, 2 = late bloomer
+#other=unknown biological sex... it's a plant, my guy. Whaddya want from me

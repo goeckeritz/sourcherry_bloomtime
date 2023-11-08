@@ -1,0 +1,50 @@
+#WGCNA requires input values as FPKM, so we gotta pull that information from the Stringtie output table for each library (-A option). If we paste the columns together
+#in a known order, I can add a header with the library names. 
+
+#First, we'll need to run the quantification script but also ask stringtie to output a table with the -A option. I submitted this as an array job. 
+#according to our PCAs for DESeq2, 27-04-34's 6/12/19 rep is an outlier -- something about mapping these all to subgenomeA really fucked this guy up. So, we 
+#will exclude him in the WGCNA analysis. 
+
+#To get the .table output from stringtie, see this script: 
+#/Users/Goeckeritz/Desktop/Desktop - Charity’s MacBook Pro/cherry_stuff_Charity/RNAseq_summer2019_bloom_analysis/StringTie2_subA_relaxed_gene_level_fpkm_for_WGCNA_analysis.sh
+
+#then sort each output table by the Gene ID, just in case the genes are reported in a different order among the files. 
+#go to the directory where the table files are and do... 
+
+
+#!/bin/sh
+
+for i in $(ls -1 *fpkm); do
+	sed '1d' $i | sort -k1 > $(echo $i)_sorted
+done
+
+#might be worth extracting a few of the Gene ID columns and comparing them to be sure they are exactly the same -- I just did that skimming the rows in a few files and making sure
+#every file had the same # of lines. They looked good. 
+
+########## Now, we can extract the column of interest from each file (FPKM, or column 8) 
+
+#!/bin/sh
+
+for i in $(ls -1 *fpkm_sorted); do
+	awk -F '\t' '{print $8}' $i > $(echo $i | sed 's/_QTL_round2_4fpkm_sorted//' | sed 's/_cleaned//' | sed 's/b//')_FPKM
+done
+
+#then, we can paste stuff together
+
+paste $(echo `ls -1 *FPKM | tr "\n" "\t"`) > pasted_FPKMs
+
+#remove first line and replace it with the header. Should be echoed in the same order. Then add the gene ids back in. 
+
+#sed '1d' pasted_FPKMs > tmp
+ls -1 *FPKM | tr "\n" "\t" | sed 's/ /\t/' > header
+sed -i 's/\t$/\n/g' header
+cat header pasted_FPKMs > tmp2
+awk '{print $1}' 27-04-34_7_18_19_R3_cleaned_QTL_round2_4fpkm_sorted > sorted_gene_list 
+##GO IN AND ADD Gene_ID TO THE FIRST LINE OF THE SORTED GENE LIST IF YOU ARE WORKING WITH WEIRD NAMES. 
+paste sorted_gene_list tmp2 > RNAseq_bloom_2019_FPKM.table
+
+#note, I went into the final file and changed Gene to Gene_ID
+#after I put the table on my local computer, I opened it up in BBedit to check the column order was correct. 
+#I checked the first 4 columns, and the last 2, and all is well. :)
+
+
